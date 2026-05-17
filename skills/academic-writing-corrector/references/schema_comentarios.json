@@ -1,0 +1,144 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Schema de Comentários Acadêmicos",
+  "description": "Formato para comentários gerados na análise de escrita acadêmica",
+  "type": "object",
+  "required": ["documento", "comentarios"],
+  "properties": {
+    "documento": {
+      "type": "string",
+      "description": "Nome ou título do documento analisado"
+    },
+    "tipo_trabalho": {
+      "type": "string",
+      "enum": ["TCC", "Artigo", "Dissertação", "Tese", "Monografia", "Relatório", "Outro"],
+      "description": "Tipo de trabalho acadêmico"
+    },
+    "norma_referencias": {
+      "type": "string",
+      "default": "ABNT",
+      "description": "Norma de referências bibliográficas adotada"
+    },
+    "comentarios": {
+      "type": "array",
+      "description": "Lista de comentários ordenados por página",
+      "items": {
+        "type": "object",
+        "required": ["id", "pagina", "categoria", "dimensao", "texto"],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Identificador único do comentário"
+          },
+          "pagina": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Número da página onde o comentário se aplica"
+          },
+          "secao": {
+            "type": "string",
+            "description": "Nome da seção do documento (ex: 'Introdução', 'Metodologia')"
+          },
+          "categoria": {
+            "type": "string",
+            "enum": ["CRÍTICO", "IMPORTANTE", "SUGESTÃO", "POSITIVO", "INFORMAÇÃO"],
+            "description": "Gravidade/tipo do comentário"
+          },
+          "dimensao": {
+            "type": "string",
+            "enum": [
+              "Estrutura e Organização",
+              "Linguagem e Estilo",
+              "Argumentação e Coerência",
+              "Citações e Referências",
+              "Metodologia",
+              "Resultados e Discussão",
+              "Normas e Formatação"
+            ],
+            "description": "Dimensão acadêmica avaliada"
+          },
+          "texto": {
+            "type": "string",
+            "description": "Texto do comentário (conciso, máximo 200 caracteres para caber na margem)"
+          },
+          "texto_completo": {
+            "type": "string",
+            "description": "Versão completa do comentário para o relatório"
+          },
+          "trecho_referencia": {
+            "type": "string",
+            "description": "Trecho do texto original ao qual o comentário se refere (para desenhar a linha conectora)"
+          },
+          "sugestao_correcao": {
+            "type": "string",
+            "description": "Sugestão específica de como corrigir o problema"
+          }
+        }
+      }
+    },
+    "pontuacoes": {
+      "type": "object",
+      "description": "Notas de 0 a 10 por dimensão",
+      "properties": {
+        "estrutura_organizacao": { "type": "number", "minimum": 0, "maximum": 10 },
+        "linguagem_estilo": { "type": "number", "minimum": 0, "maximum": 10 },
+        "argumentacao_coerencia": { "type": "number", "minimum": 0, "maximum": 10 },
+        "citacoes_referencias": { "type": "number", "minimum": 0, "maximum": 10 },
+        "metodologia": { "type": "number", "minimum": 0, "maximum": 10 },
+        "resultados_discussao": { "type": "number", "minimum": 0, "maximum": 10 },
+        "normas_formatacao": { "type": "number", "minimum": 0, "maximum": 10 }
+      }
+    }
+  },
+
+  "examples": [
+    {
+      "documento": "TCC_Maria_Silva_2024.pdf",
+      "tipo_trabalho": "TCC",
+      "norma_referencias": "ABNT",
+      "comentarios": [
+        {
+          "id": 1,
+          "pagina": 1,
+          "secao": "Introdução",
+          "categoria": "IMPORTANTE",
+          "dimensao": "Argumentação e Coerência",
+          "texto": "Falta delimitação clara do problema de pesquisa",
+          "texto_completo": "A introdução apresenta o tema de forma ampla, mas não delimita claramente o problema de pesquisa que o trabalho se propõe a resolver. Inclua uma pergunta de pesquisa explícita.",
+          "trecho_referencia": "Este trabalho aborda",
+          "sugestao_correcao": "Adicione ao final da introdução: 'Diante disso, esta pesquisa busca responder: [pergunta de pesquisa]'"
+        },
+        {
+          "id": 2,
+          "pagina": 3,
+          "secao": "Referencial Teórico",
+          "categoria": "CRÍTICO",
+          "dimensao": "Citações e Referências",
+          "texto": "Citação direta sem indicar número de página",
+          "texto_completo": "Citações diretas (transcrição literal) exigem indicação de página conforme ABNT NBR 10520:2023. Inclua o número de página após o ano.",
+          "trecho_referencia": "(SOUZA, 2020)",
+          "sugestao_correcao": "Corrija para: (SOUZA, 2020, p. XX)"
+        },
+        {
+          "id": 3,
+          "pagina": 5,
+          "secao": "Metodologia",
+          "categoria": "POSITIVO",
+          "dimensao": "Metodologia",
+          "texto": "Justificativa da escolha metodológica bem fundamentada",
+          "texto_completo": "A escolha pela pesquisa qualitativa está bem justificada e alinhada com os objetivos do trabalho.",
+          "trecho_referencia": "optou-se pela abordagem qualitativa"
+        }
+      ],
+      "pontuacoes": {
+        "estrutura_organizacao": 7.5,
+        "linguagem_estilo": 8.0,
+        "argumentacao_coerencia": 6.5,
+        "citacoes_referencias": 5.0,
+        "metodologia": 8.5,
+        "resultados_discussao": 7.0,
+        "normas_formatacao": 6.0
+      }
+    }
+  ]
+}
